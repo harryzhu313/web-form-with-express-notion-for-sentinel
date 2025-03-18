@@ -15,35 +15,35 @@ app.get("/", function (request, response) {
 })
 
 // Create new database. The page ID is set in the environment variables.
-app.post("/databases", async function (request, response) {
-  const pageId = process.env.NOTION_PAGE_ID
-  const title = request.body.dbName
+// app.post("/databases", async function (request, response) {
+//   const pageId = process.env.NOTION_PAGE_ID
+//   const title = request.body.dbName
 
-  try {
-    const newDb = await notion.databases.create({
-      parent: {
-        type: "page_id",
-        page_id: pageId,
-      },
-      title: [
-        {
-          type: "text",
-          text: {
-            content: title,
-          },
-        },
-      ],
-      properties: {
-        Name: {
-          title: {},
-        },
-      },
-    })
-    response.json({ message: "success!", data: newDb })
-  } catch (error) {
-    response.json({ message: "error", error })
-  }
-})
+//   try {
+//     const newDb = await notion.databases.create({
+//       parent: {
+//         type: "page_id",
+//         page_id: pageId,
+//       },
+//       title: [
+//         {
+//           type: "text",
+//           text: {
+//             content: title,
+//           },
+//         },
+//       ],
+//       properties: {
+//         Name: {
+//           title: {},
+//         },
+//       },
+//     })
+//     response.json({ message: "success!", data: newDb })
+//   } catch (error) {
+//     response.json({ message: "error", error })
+//   }
+// })
 
 // Create new page. The database ID is provided in the web form.添加了 database 的环境变量，不需要新创建一个 database 再添加 page 了。
 app.post("/pages", async function (request, response) {
@@ -88,57 +88,57 @@ app.post("/pages", async function (request, response) {
 })
 
 // Create new block (page content). The page ID is provided in the web form.
-app.post("/blocks", async function (request, response) {
-  const { pageID, content } = request.body
+// app.post("/blocks", async function (request, response) {
+//   const { pageID, content } = request.body
 
-  try {
-    const newBlock = await notion.blocks.children.append({
-      block_id: pageID, // a block ID can be a page ID
-      children: [
-        {
-          // Use a paragraph as a default but the form or request can be updated to allow for other block types: https://developers.notion.com/reference/block#keys
-          paragraph: {
-            rich_text: [
-              {
-                text: {
-                  content: content,
-                },
-              },
-            ],
-          },
-        },
-      ],
-    })
-    response.json({ message: "success!", data: newBlock })
-  } catch (error) {
-    response.json({ message: "error", error })
-  }
-})
+//   try {
+//     const newBlock = await notion.blocks.children.append({
+//       block_id: pageID, // a block ID can be a page ID
+//       children: [
+//         {
+//           // Use a paragraph as a default but the form or request can be updated to allow for other block types: https://developers.notion.com/reference/block#keys
+//           paragraph: {
+//             rich_text: [
+//               {
+//                 text: {
+//                   content: content,
+//                 },
+//               },
+//             ],
+//           },
+//         },
+//       ],
+//     })
+//     response.json({ message: "success!", data: newBlock })
+//   } catch (error) {
+//     response.json({ message: "error", error })
+//   }
+// })
 
 // Create new page comments. The page ID is provided in the web form.
-app.post("/comments", async function (request, response) {
-  const { pageID, comment } = request.body
+// app.post("/comments", async function (request, response) {
+//   const { pageID, comment } = request.body
 
-  try {
-    const newComment = await notion.comments.create({
-      parent: {
-        page_id: pageID,
-      },
-      rich_text: [
-        {
-          text: {
-            content: comment,
-          },
-        },
-      ],
-    })
-    response.json({ message: "success!", data: newComment })
-  } catch (error) {
-    response.json({ message: "error", error })
-  }
-})
+//   try {
+//     const newComment = await notion.comments.create({
+//       parent: {
+//         page_id: pageID,
+//       },
+//       rich_text: [
+//         {
+//           text: {
+//             content: comment,
+//           },
+//         },
+//       ],
+//     })
+//     response.json({ message: "success!", data: newComment })
+//   } catch (error) {
+//     response.json({ message: "error", error })
+//   }
+// })
 
-// listen for requests :)
-const listener = app.listen(process.env.PORT, function () {
-  console.log("Your app is listening on port " + listener.address().port)
-})
+// // listen for requests :)
+// const listener = app.listen(process.env.PORT, function () {
+//   console.log("Your app is listening on port " + listener.address().port)
+// })

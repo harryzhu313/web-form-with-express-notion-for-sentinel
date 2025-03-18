@@ -5,18 +5,17 @@
  */
 
 // Forms
-const dbForm = document.getElementById("databaseForm")
+// const dbForm = document.getElementById("databaseForm") //从文档中查找并获取 ID 为 "databaseForm" 的元素，并将其赋值给变量 dbForm
 const pageForm = document.getElementById("pageForm")
-const blocksForm = document.getElementById("blocksForm")
-const commentForm = document.getElementById("commentForm")
-// const newPageDB = "13a62405089a81609a21fa910fdf5b16"; // 你的固定数据库ID
+// const blocksForm = document.getElementById("blocksForm")
+// const commentForm = document.getElementById("commentForm")
 
 
 // Table cells where API responses will be appended
-const dbResponseEl = document.getElementById("dbResponse")
+// const dbResponseEl = document.getElementById("dbResponse")
 const pageResponseEl = document.getElementById("pageResponse")
-const blocksResponseEl = document.getElementById("blocksResponse")
-const commentResponseEl = document.getElementById("commentResponse")
+// const blocksResponseEl = document.getElementById("blocksResponse")
+// const commentResponseEl = document.getElementById("commentResponse")
 
 /**
  * Functions to handle appending new content to /views/index.html
@@ -67,31 +66,31 @@ const appendBlocksResponse = function (apiResponse, el) {
  */
 
 // Attach submit event to each form
-dbForm.onsubmit = async function (event) {
-  event.preventDefault()
+// dbForm.onsubmit = async function (event) {
+//   event.preventDefault() //这行代码阻止了浏览器默认的表单提交行为（即页面刷新）。这是使用 AJAX 技术时必须的步骤，能让用户体验更流畅。
 
-  const dbName = event.target.dbName.value
-  const body = JSON.stringify({ dbName })
+//   const dbName = event.target.dbName.value //获取表单中名为 dbName 的输入框的值
+//   const body = JSON.stringify({ dbName }) //将 dbName 的值转换为 JSON 字符串
+// //发起异步 POST 请求
+//   const newDBResponse = await fetch("/databases", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body,
+//   })
+//   const newDBData = await newDBResponse.json() //解析响应体为 JSON 格式
 
-  const newDBResponse = await fetch("/databases", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  })
-  const newDBData = await newDBResponse.json()
-
-  appendApiResponse(newDBData, dbResponseEl)
-}
+//   appendApiResponse(newDBData, dbResponseEl) //将响应体添加到页面上
+// }
 
 pageForm.onsubmit = async function (event) {
   event.preventDefault()
 
-  const dbID = event.target.newPageDB.value
+  const dbID = event.target.newPageDB.value//获取表单中名为 newPageDB 的输入框的值
   const pageName = event.target.newPageName.value
   const header = event.target.header.value
-  const body = JSON.stringify({ dbID, pageName, header })
+  const body = JSON.stringify({ dbID, pageName, header })//将表单中的值转换为 JSON 字符串
 
   const newPageResponse = await fetch("/pages", {
     method: "POST",
@@ -105,40 +104,40 @@ pageForm.onsubmit = async function (event) {
   appendApiResponse(newPageData, pageResponseEl)
 }
 
-blocksForm.onsubmit = async function (event) {
-  event.preventDefault()
+// blocksForm.onsubmit = async function (event) {
+//   event.preventDefault()
 
-  const pageID = event.target.pageID.value
-  const content = event.target.content.value
-  const body = JSON.stringify({ pageID, content })
+//   const pageID = event.target.pageID.value
+//   const content = event.target.content.value
+//   const body = JSON.stringify({ pageID, content })
 
-  const newBlockResponse = await fetch("/blocks", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  })
+//   const newBlockResponse = await fetch("/blocks", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body,
+//   })
 
-  const newBlockData = await newBlockResponse.json()
-  appendBlocksResponse(newBlockData, blocksResponseEl)
-}
+//   const newBlockData = await newBlockResponse.json()
+//   appendBlocksResponse(newBlockData, blocksResponseEl)
+// }
 
-commentForm.onsubmit = async function (event) {
-  event.preventDefault()
+// commentForm.onsubmit = async function (event) {
+//   event.preventDefault()
 
-  const pageID = event.target.pageIDComment.value
-  const comment = event.target.comment.value
-  const body = JSON.stringify({ pageID, comment })
+//   const pageID = event.target.pageIDComment.value
+//   const comment = event.target.comment.value
+//   const body = JSON.stringify({ pageID, comment })
 
-  const newCommentResponse = await fetch("/comments", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  })
+//   const newCommentResponse = await fetch("/comments", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body,
+//   })
 
-  const newCommentData = await newCommentResponse.json()
-  appendApiResponse(newCommentData, commentResponseEl)
-}
+//   const newCommentData = await newCommentResponse.json()
+//   appendApiResponse(newCommentData, commentResponseEl)
+// }
