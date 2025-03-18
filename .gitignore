@@ -1,0 +1,5 @@
+# Ignore all log files 
+*.log
+/node_modules
+.DS_Store
+.env
