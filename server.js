@@ -47,7 +47,7 @@ app.get("/", function (request, response) {
 
 // Create new page. The database ID is provided in the web form.添加了 database 的环境变量，不需要新创建一个 database 再添加 page 了。
 app.post("/pages", async function (request, response) {
-  const { pageName, header } = request.body
+  const { pageName, email, phone ,header,paragraph} = request.body
   const dbID = process.env.NOTION_DATABASE_ID
   try {
     const newPage = await notion.pages.create({
@@ -65,6 +65,15 @@ app.post("/pages", async function (request, response) {
             },
           ],
         },
+
+        Email: {
+          email: email, // email 类型的属性
+       },  
+
+       Phone: {
+          phone_number: phone,// phone_number 类型的属性
+       },
+
       },
       children: [
         {
@@ -79,6 +88,21 @@ app.post("/pages", async function (request, response) {
             ],
           },
         },
+
+        {
+          object: "block",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+                text: {
+                  content: paragraph,
+                },
+              },
+            ],
+          },
+        },
+        
       ],
     })
     response.json({ message: "success!", data: newPage })
@@ -138,7 +162,8 @@ app.post("/pages", async function (request, response) {
 //   }
 // })
 
-// // listen for requests :)
-// const listener = app.listen(process.env.PORT, function () {
-//   console.log("Your app is listening on port " + listener.address().port)
-// })
+// listen for requests :)启动逻辑
+const listener = app.listen(process.env.PORT, function () {
+  console.log("Your app is listening on port " + listener.address().port)
+})
+

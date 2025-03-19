@@ -85,12 +85,15 @@ const appendBlocksResponse = function (apiResponse, el) {
 // }
 
 pageForm.onsubmit = async function (event) {
-  event.preventDefault()
+  event.preventDefault()//阻止默认的表单提交行为
 
-  const dbID = event.target.newPageDB.value//获取表单中名为 newPageDB 的输入框的值
+  // const dbID = event.target.newPageDB.value//获取表单中名为 newPageDB 的输入框的值
   const pageName = event.target.newPageName.value
+  const email = event.target.newEmail.value
+  const phone = event.target.newPhoneNumber.value
   const header = event.target.header.value
-  const body = JSON.stringify({ dbID, pageName, header })//将表单中的值转换为 JSON 字符串
+  const paragraph = event.target.newParagraph.value
+  const body = JSON.stringify({ pageName,email,phone,header,paragraph})//将表单中的值转换为 JSON 字符串
 
   const newPageResponse = await fetch("/pages", {
     method: "POST",
