@@ -47,69 +47,82 @@ app.get("/", function (request, response) {
 
 // Create new page. The database ID is provided in the web form.添加了 database 的环境变量，不需要新创建一个 database 再添加 page 了。
 app.post("/pages", async function (request, response) {
-  const { pageName, email, phone ,header,paragraph} = request.body
-  const dbID = process.env.NOTION_DATABASE_ID
+  const { pageName, email, phone, header, paragraph } = request.body;
+  // 输入校验，只要求必须填写 name 和 email
+  if (!pageName || !email) {
+    return response.json({ message: "❌ Name&Email must be required!" });
+  }
+  const dbID = process.env.NOTION_DATABASE_ID;
+
+  // 构造 properties 对象，先放入必填项，再根据是否有 phone 添加可选项
+  const properties = {
+    Name: {
+      title: [
+        {
+          text: {
+            content: pageName,
+          },
+        },
+      ],
+    },
+    Email: {
+      email: email,
+    },
+  };
+  if (phone) {
+    properties.Phone = { phone_number: phone };
+  }
+
+  // 构造 children 数组，header 和 paragraph 均为可选
+  const children = [];
+  if (header) {
+    children.push({
+      object: "block",
+      heading_2: {
+        rich_text: [
+          {
+            text: {
+              content: header,
+            },
+          },
+        ],
+      },
+    });
+  }
+  if (paragraph) {
+    children.push({
+      object: "block",
+      paragraph: {
+        rich_text: [
+          {
+            type: "text",
+            text: {
+              content: paragraph,
+            },
+          },
+        ],
+      },
+    });
+  }
+
   try {
+    // 如果 children 数组有内容才传入，不然不传
     const newPage = await notion.pages.create({
       parent: {
         type: "database_id",
         database_id: dbID,
       },
-      properties: {
-        Name: {
-          title: [
-            {
-              text: {
-                content: pageName,
-              },
-            },
-          ],
-        },
-
-        Email: {
-          email: email, // email 类型的属性
-       },  
-
-       Phone: {
-          phone_number: phone,// phone_number 类型的属性
-       },
-
-      },
-      children: [
-        {
-          object: "block",
-          heading_2: {
-            rich_text: [
-              {
-                text: {
-                  content: header,
-                },
-              },
-            ],
-          },
-        },
-
-        {
-          object: "block",
-          paragraph: {
-            rich_text: [
-              {
-                type: "text",
-                text: {
-                  content: paragraph,
-                },
-              },
-            ],
-          },
-        },
-        
-      ],
-    })
-    response.json({ message: "success!", data: newPage })
+      properties,
+      ...(children.length > 0 && { children }),
+    });
+    response.json({
+      message: "✅ Submit！We'll contact to you soon! 😊",
+      data: newPage,
+    });
   } catch (error) {
-    response.json({ message: "error", error })
+    response.json({ message: "error", error });
   }
-})
+});
 
 // Create new block (page content). The page ID is provided in the web form.
 // app.post("/blocks", async function (request, response) {

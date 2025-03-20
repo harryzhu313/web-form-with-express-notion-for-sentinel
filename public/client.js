@@ -23,14 +23,14 @@ const pageResponseEl = document.getElementById("pageResponse")
 
 // Appends the API response to the UI
 const appendApiResponse = function (apiResponse, el) {
-  console.log(apiResponse)
+  console.log(apiResponse) //打印响应体
 
   // Add success message to UI
   const newParagraphSuccessMsg = document.createElement("p")
   newParagraphSuccessMsg.textContent = "Result: " + apiResponse.message
   el.appendChild(newParagraphSuccessMsg)
   // See browser console for more information
-  if (apiResponse.message === "error") return
+  if (apiResponse.message === "error") return //如果响应体中的 message 属性值为 "error"，则返回
 
   // Add ID of Notion item (db, page, comment) to UI
   const newParagraphId = document.createElement("p")
