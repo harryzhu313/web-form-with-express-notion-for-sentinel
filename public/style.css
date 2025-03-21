@@ -46,7 +46,30 @@ input {
   width: 100%;
 }
 
-form input[type="submit"] {
+/* 在文本框里添加 icon */
+.input-icon-container {
+  position: relative;
+  width: 300px; /* 根据需求调整宽度 */
+  margin-bottom: 15px;
+}
+
+.input-icon-container input,.input-icon-container textarea {
+  width: 100%;
+  padding-left: 35px; /* 为icon预留空间 */
+  height: 35px;
+  box-sizing: border-box;
+}
+
+.input-icon-container i {
+  position: absolute;
+  left: 10px;
+  top: 40%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+
+
+button {
   background-color: #bbbbf2;
   border: 2px solid currentColor;
   border-radius: 0.25em;
@@ -59,11 +82,11 @@ form input[type="submit"] {
   margin-left: auto;
 }
 
-form input[type="submit"]:hover {
+button:hover {
   background-color: #9292d3;
 }
 
-form input[type="submit"]:active {
+button:active {
   background-color: #b2b2d5;
 }
 
