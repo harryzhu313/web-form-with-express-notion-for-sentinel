@@ -21,7 +21,7 @@ const pageResponseEl = document.getElementById("pageResponse")
  * Functions to handle appending new content to /views/index.html
  */
 
-// Appends the API response to the UI
+// Appends the API response to the UI，将 API 响应添加到页面上
 const appendApiResponse = function (apiResponse, el) {
   console.log(apiResponse) //打印响应体
 
@@ -32,21 +32,21 @@ const appendApiResponse = function (apiResponse, el) {
   // See browser console for more information
   if (apiResponse.message === "error") return //如果响应体中的 message 属性值为 "error"，则返回
 
-  // Add ID of Notion item (db, page, comment) to UI
-  const newParagraphId = document.createElement("p")
-  newParagraphId.textContent = "ID: " + apiResponse.data.id
-  el.appendChild(newParagraphId)
+  // Add ID of Notion item (db, page, comment) to UI，将 ID 添加到页面上
+  // const newParagraphId = document.createElement("p")
+  // newParagraphId.textContent = "ID: " + apiResponse.data.id
+  // el.appendChild(newParagraphId) 
 
-  // Add URL of Notion item (db, page) to UI
-  if (apiResponse.data.url) {
-    const newAnchorTag = document.createElement("a")
-    newAnchorTag.setAttribute("href", apiResponse.data.url)
-    newAnchorTag.innerText = apiResponse.data.url
-    el.appendChild(newAnchorTag)
-  }
-}
+  // Add URL of Notion item (db, page) to UI，将 URL 添加到页面上
+//   if (apiResponse.data.url) {
+//     const newAnchorTag = document.createElement("a")
+//     newAnchorTag.setAttribute("href", apiResponse.data.url)
+//     newAnchorTag.innerText = apiResponse.data.url
+//     el.appendChild(newAnchorTag)
+//   }
+} 
 
-// Appends the blocks API response to the UI
+// Appends the blocks API response to the UI，将块 API 响应添加到页面上
 const appendBlocksResponse = function (apiResponse, el) {
   console.log(apiResponse)
 
