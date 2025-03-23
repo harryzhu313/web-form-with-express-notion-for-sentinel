@@ -15,12 +15,7 @@
     <script src="/client.js" defer></script>
   </head>
   <body>
-    <main>
-      <table>
-        <tr>
-          <th>Step</th>
-          <th>Response</th>
-        </tr>
+    <main>      
         <!-- 创建 databse 的表单和 response -->
         <!-- <tr>
           <td>
@@ -36,47 +31,61 @@
         </tr> !-->
 
         <!-- 创建 page 的表单和 response -->
-        <tr>
-          <td>
-            
+        
+
             <form id="pageForm">
+              <h1><strong>Leave your Message</strong></h1>
               <p>Hello, please leave your contact information. We'll contact you soon.</p>
               <!-- <label for="newPageDB" style="display:none;">Parent DB ID</label> -->
               <!-- <input type="text" id="newPageDB" style="display:none;" /> -->
-              <label for="newPageName" required>*Name</label>
-              <div class="input-icon-container">
-                <i class="fa-solid fa-circle-user"></i> 
-                <input type="text" id="newPageName" />
+              <div class="form-row">
+                <div class="input-group">
+                  <label for="newPageName">*Name</label>
+                  <div class="input-icon-container">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <input type="text" id="newPageName" />
+                  </div>
+                </div>
+              
+                <div class="input-group">
+                  <label for="newEmail">*Email</label>
+                  <div class="input-icon-container">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="newEmail" placeholder="example@mail.com"/>
+                  </div>
+                </div>
               </div>
+              
 
-              <label for ="newEmail" required>*Email</label>
-              <div class="input-icon-container">
-                <i class="fa-solid fa-envelope"></i>
-                <input type="email" id="newEmail" placeholder="example@mail.com"/>  
-              </div>  
-
-              <label for="newPhoneNumber">WhatsApp</label>
-              <div class="input-icon-container">
-                <i class="fa-solid fa-phone-volume"></i>
-                <input type="tel" id="newPhoneNumber"/>
+              <div class="form-row">
+                <div class="input-group">
+                  <label for="newPhoneNumber">WhatsApp</label>
+                  <div class="input-icon-container">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <input type="tel" id="newPhoneNumber"/>
+                  </div>
+                </div>
+              <!-- 隐藏了 -->
+                <div class="input-group" style="visibility: hidden;">
+                  <label for="header">Header 1</label>
+                  <input type="text" id="header"/>
+                </div>
               </div>
-<!-- head 隐藏了 -->
-              <label for="header" style="display:none;">Header 1</label>
-              <input type="text" id="header" style="display:none;"/>
-<!-- head 隐藏了 -->
+              
 
               <label for="newParagraph">Contents</label>
               <div class="input-icon-container">
-                <i class="fa-solid fa-comment"></i>
+                <i id="textarea-icon" class="fa-solid fa-comment"></i>
                 <textarea id="newParagraph"></textarea>
               </div>
 
-              <button type="submit">Submit</button>
+              <button type="submit"><strong>Submit</strong></button>
+              <span class="bar"><span class="load"></span></span>
             </form>
-          </td>
+       
           <!-- The page form response will be appended here after submitting it -->
-          <td id="pageResponse"></td>
-        </tr>
+          <!-- <td id="pageResponse"></td> -->
+       
 
         <!-- 创建 content 的表单和 response -->
         <!-- <tr>
@@ -109,7 +118,10 @@
           <!-- The comment form response will be appended here after submitting it -->
           <!-- <td id="commentResponse"></td>
         </tr> -->
-      </table>
     </main>
+
+    <!-- 引入jQuery (必须，JS代码使用了jQuery) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
+    
   </body>
 </html>

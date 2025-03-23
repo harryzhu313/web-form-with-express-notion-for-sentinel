@@ -5,36 +5,25 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: 'Arial', sans-serif;
   margin: 2em 1em;
   line-height: 1.5em;
 }
 
-h1 {
-  color: #7171d1;
-  max-width: calc(100% - 5rem);
-  line-height: 1.1;
+p{
+  margin-top: -25px;
 }
-
-table {
-  width: 100%;
-}
-
-th {
-  text-align: left;
-}
-
-td {
-  width: 50%;
-  word-break: break-all;
-}
-
 form {
-  background-color: #eee;
+  background-image: url('https://www.sentinel-china.com/cn/images/about/c-bg.jpg');
+  background-size: cover;          /* 图片铺满整个表单区域 */
+  background-position: center;     /* 图片居中显示 */
+  background-repeat: no-repeat;    /* 防止图片重复 */
   display: grid;
   grid-gap: 1em;
   padding: 1em;
-  max-width: 40ch;
+  max-width: 100%;
+  color: #000; /* 根据图片背景深浅调整表单文字颜色 */
+  position: relative;
 }
 
 input {
@@ -46,18 +35,33 @@ input {
   width: 100%;
 }
 
+/* 一行显示 2 个输入框 */
+.form-row {
+  display: flex;
+  gap: 1rem; /* 控制两个输入框之间的距离 */
+}
+
+.input-group {
+  flex: 1; /* 两个输入框平均分配宽度 */
+  display: flex;
+  flex-direction: column;
+}
+
 /* 在文本框里添加 icon */
 .input-icon-container {
   position: relative;
-  width: 300px; /* 根据需求调整宽度 */
-  margin-bottom: 15px;
 }
 
-.input-icon-container input,.input-icon-container textarea {
+
+.input-icon-container input,.input-icon-container textarea  {
   width: 100%;
   padding-left: 35px; /* 为icon预留空间 */
   height: 35px;
   box-sizing: border-box;
+}
+
+.input-icon-container textarea {
+  height: 100px;
 }
 
 .input-icon-container i {
@@ -68,6 +72,14 @@ input {
   color: #aaa;
 }
 
+#textarea-icon {
+  position: absolute;
+  left: 10px;
+  top: 15%;
+  transform: translateY(-50%);
+  color: #aaa;
+}
+/* 在文本框里添加 icon */
 
 button {
   background-color: #bbbbf2;
@@ -82,16 +94,91 @@ button {
   margin-left: auto;
 }
 
-button:hover {
-  background-color: #9292d3;
-}
+
 
 button:active {
   background-color: #b2b2d5;
 }
 
-footer {
-  margin-top: 3em;
-  padding-top: 1.5em;
-  border-top: 1px solid lightgrey;
+
+
+/* 表单提交后的绿色对钩动画效果 */
+
+button {
+  position: relative;
+  /* width: 200px;
+  height: 70px; */
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
+  background-color: #1c1412;
+  color: #f6df00;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background-color 0.5s ease;
+}
+
+button:hover {
+  background-color: #f6df00;
+  color:#1c1412;
+}
+
+.bar,
+.load {
+  position: absolute;
+  bottom: 10%;
+  left: 2.5%;
+  width: 95%;
+  height: 5px;
+  border-radius: 20px;
+  opacity: 0;
+}
+
+.bar {
+  background-color: #b34700;
+}
+
+.load {
+  background-color: #fff;
+  width: 0%;
+}
+
+button:hover .bar,
+button:hover .load {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.loading {
+  width: 100%;
+  transition: width 5s linear;
+}
+
+button.complete {
+  background-color: #4EBA4E;
+}
+
+button.complete strong,
+button.complete .bar,
+button.complete .load {
+  opacity: 0;
+}
+
+button.complete::before {
+  content: '\f00c';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 1.5em;
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: appear 0.5s ease forwards;
+}
+
+@keyframes appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

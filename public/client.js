@@ -13,7 +13,7 @@ const pageForm = document.getElementById("pageForm")
 
 // Table cells where API responses will be appended
 // const dbResponseEl = document.getElementById("dbResponse")
-const pageResponseEl = document.getElementById("pageResponse")
+// const pageResponseEl = document.getElementById("pageResponse")
 // const blocksResponseEl = document.getElementById("blocksResponse")
 // const commentResponseEl = document.getElementById("commentResponse")
 
@@ -84,28 +84,69 @@ const appendBlocksResponse = function (apiResponse, el) {
 //   appendApiResponse(newDBData, dbResponseEl) //将响应体添加到页面上
 // }
 
-pageForm.onsubmit = async function (event) {
-  event.preventDefault()//阻止默认的表单提交行为
+//当没有提交 email 和 name 时，会弹出提示框，且输入框会变红;提交成功后，按钮会变成绿色动画对钩
 
-  // const dbID = event.target.newPageDB.value//获取表单中名为 newPageDB 的输入框的值
-  const pageName = event.target.newPageName.value
-  const email = event.target.newEmail.value
-  const phone = event.target.newPhoneNumber.value
-  const header = event.target.header.value
-  const paragraph = event.target.newParagraph.value
-  const body = JSON.stringify({ pageName,email,phone,header,paragraph})//将表单中的值转换为 JSON 字符串
+$(document).ready(function() {
+  const pageForm = $("#pageForm");
 
-  const newPageResponse = await fetch("/pages", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
-  })
+  pageForm.on("submit", function(e) {
+    e.preventDefault(); // 阻止表单默认提交
 
-  const newPageData = await newPageResponse.json()
-  appendApiResponse(newPageData, pageResponseEl)
-}
+    const pageNameInput = $("#newPageName");
+    const emailInput = $("#newEmail");
+    const pageName = pageNameInput.val().trim();
+    const email = emailInput.val().trim();
+
+    // 重置错误样式
+    pageNameInput.css("border-bottom", "");
+    emailInput.css("border-bottom", "");
+
+    // 验证必填字段
+    if (!pageName || !email) {
+      if (!pageName) pageNameInput.css("border-bottom", "2px solid red");
+      if (!email) emailInput.css("border-bottom", "2px solid red");
+
+      setTimeout(() => {
+        alert("🤯 Name&Email must be required!");
+      }, 0);
+
+      return; // 不继续执行
+    }
+
+    // 开始按钮动画
+    const button = pageForm.find("button");
+    const lBar = button.find(".load");
+
+    button.removeClass("complete");
+    lBar.removeClass("loading").width(0);
+
+    setTimeout(() => lBar.addClass("loading"), 10);
+
+    // 发送表单数据
+    const body = JSON.stringify({
+      pageName,
+      email
+      // 其他字段根据需要加入
+    });
+
+    fetch("/pages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+    })
+    .then(res => res.json())
+    .then(data => {
+      // 10ms秒后显示成功
+      setTimeout(() => {
+        button.addClass("complete");
+      }, 10);
+      
+      // 显示返回的消息
+      // appendApiResponse(data, $("#pageResponse")[0]);
+    })
+    // .catch(() => alert("提交失败，请重试"));
+  });
+});
 
 // blocksForm.onsubmit = async function (event) {
 //   event.preventDefault()
