@@ -94,8 +94,13 @@ $(document).ready(function() {
 
     const pageNameInput = $("#newPageName");
     const emailInput = $("#newEmail");
+    const phoneInput = $("#newPhoneNumber");  // 添加phone输入框引用
+    const paragraphInput = $("#newParagraph");  // 添加contents输入框引用
+
     const pageName = pageNameInput.val().trim();
     const email = emailInput.val().trim();
+    const phone = phoneInput.val().trim();          // 获取phone值
+    const paragraph = paragraphInput.val().trim();  // 获取contents值
 
     // 重置错误样式
     pageNameInput.css("border-bottom", "");
@@ -122,11 +127,12 @@ $(document).ready(function() {
 
     setTimeout(() => lBar.addClass("loading"), 10);
 
-    // 发送表单数据
+    // 正确发送完整表单数据
     const body = JSON.stringify({
       pageName,
-      email
-      // 其他字段根据需要加入
+      email,
+      phone,        // 新添加
+      paragraph     // 新添加
     });
 
     fetch("/pages", {
@@ -136,17 +142,14 @@ $(document).ready(function() {
     })
     .then(res => res.json())
     .then(data => {
-      // 10ms秒后显示成功
       setTimeout(() => {
         button.addClass("complete");
       }, 10);
-      
-      // 显示返回的消息
-      // appendApiResponse(data, $("#pageResponse")[0]);
     })
     // .catch(() => alert("提交失败，请重试"));
   });
 });
+
 
 // blocksForm.onsubmit = async function (event) {
 //   event.preventDefault()
