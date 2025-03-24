@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  margin: 2em 1em;
+  margin: -5px -5px;
   line-height: 1.5em;
 }
 
@@ -93,14 +93,6 @@ button {
   cursor: pointer;
   margin-left: auto;
 }
-
-
-
-button:active {
-  background-color: #b2b2d5;
-}
-
-
 
 /* 表单提交后的绿色对钩动画效果 */
 
