@@ -127,6 +127,10 @@ $(document).ready(function() {
 
     setTimeout(() => lBar.addClass("loading"), 10);
 
+    // wml 给父页返回一个提交成功的提示
+
+    window.parent.postMessage('formSubmitted', '*');
+
     // 正确发送完整表单数据
     const body = JSON.stringify({
       pageName,
