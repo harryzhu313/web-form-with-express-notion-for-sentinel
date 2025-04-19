@@ -79,24 +79,11 @@ input {
   transform: translateY(-50%);
   color: #aaa;
 }
-/* 在文本框里添加 icon */
 
-button {
-  background-color: #bbbbf2;
-  border: 2px solid currentColor;
-  border-radius: 0.25em;
-  cursor: pointer;
-  font-size: inherit;
-  line-height: 1.4em;
-  padding: 0.25em 1em;
-  max-width: 20ch;
-  cursor: pointer;
-  margin-left: auto;
-}
 
 /* 表单提交后的绿色对钩动画效果 */
 
-button {
+#submitBtn {
   position: relative;
   /* width: 200px;
   height: 70px; */
@@ -108,9 +95,11 @@ button {
   cursor: pointer;
   overflow: hidden;
   transition: background-color 0.5s ease;
+  line-height: 1.4em;
+  padding: 0.25em 1em;
 }
 
-button:hover {
+#submitBtn:hover {
   background-color: #f6df00;
   color:#1c1412;
 }
@@ -146,17 +135,17 @@ button:hover .load {
   transition: width 5s linear;
 }
 
-button.complete {
+#submitBtn.complete {
   background-color: #4EBA4E;
 }
 
-button.complete strong,
-button.complete .bar,
-button.complete .load {
+#submitBtn.complete strong,
+#submitBtn.complete .bar,
+#submitBtn.complete .load {
   opacity: 0;
 }
 
-button.complete::before {
+#submitBtn.complete::before {
   content: '\f00c';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
@@ -173,4 +162,38 @@ button.complete::before {
 @keyframes appear {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* --- 按钮组布局 --- */
+.button-group{
+  display:flex;
+  gap:0.6rem;          /* 按钮间距 */
+  justify-content:flex-end;
+  align-items:center;
+} 
+
+/* 解决原有 button{ margin-left:auto } 把 Submit 顶到最右的问题 */
+.button-group button{
+  margin-left:0;            /* 取消自动推位 */
+}
+
+/* 刷新按钮造型：延用 submit 的风格并做区分 */
+#refreshBtn{
+  background:none;      /* 透明背景 */
+  border:none;          /* 无边框 */
+  padding:0.5em;            /* 取消内边距，图标贴边 */
+  width:auto; height:auto;   /* 让尺寸随图标 */
+  line-height:1;
+  cursor:pointer; 
+}
+
+#refreshBtn i{
+  font-size:1.5em;
+  color:#1c1412;
+}
+
+#refreshBtn:hover{
+  background-color:#F3F3F3;
+  color:#1c1412;
+  padding: 0.5em; /* 鼠标悬停时添加内边距 */
 }

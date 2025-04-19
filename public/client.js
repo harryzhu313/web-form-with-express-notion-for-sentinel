@@ -10,7 +10,6 @@ const pageForm = document.getElementById("pageForm")
 // const blocksForm = document.getElementById("blocksForm")
 // const commentForm = document.getElementById("commentForm")
 
-
 // Table cells where API responses will be appended
 // const dbResponseEl = document.getElementById("dbResponse")
 // const pageResponseEl = document.getElementById("pageResponse")
@@ -31,20 +30,7 @@ const appendApiResponse = function (apiResponse, el) {
   el.appendChild(newParagraphSuccessMsg)
   // See browser console for more information
   if (apiResponse.message === "error") return //如果响应体中的 message 属性值为 "error"，则返回
-
-  // Add ID of Notion item (db, page, comment) to UI，将 ID 添加到页面上
-  // const newParagraphId = document.createElement("p")
-  // newParagraphId.textContent = "ID: " + apiResponse.data.id
-  // el.appendChild(newParagraphId) 
-
-  // Add URL of Notion item (db, page) to UI，将 URL 添加到页面上
-//   if (apiResponse.data.url) {
-//     const newAnchorTag = document.createElement("a")
-//     newAnchorTag.setAttribute("href", apiResponse.data.url)
-//     newAnchorTag.innerText = apiResponse.data.url
-//     el.appendChild(newAnchorTag)
-//   }
-} 
+}
 
 // Appends the blocks API response to the UI，将块 API 响应添加到页面上
 const appendBlocksResponse = function (apiResponse, el) {
@@ -65,130 +51,85 @@ const appendBlocksResponse = function (apiResponse, el) {
  * Attach submit event handlers to each form included in /views/index.html
  */
 
-// Attach submit event to each form
-// dbForm.onsubmit = async function (event) {
-//   event.preventDefault() //这行代码阻止了浏览器默认的表单提交行为（即页面刷新）。这是使用 AJAX 技术时必须的步骤，能让用户体验更流畅。
+$(document).ready(function () {
+  /* ---------- ★ 提交锁定状态 ---------- */
+  let hasSubmitted = false          // 是否已提交过
+  let lastSuccessMsg = ""           // 记录服务器成功返回值
 
-//   const dbName = event.target.dbName.value //获取表单中名为 dbName 的输入框的值
-//   const body = JSON.stringify({ dbName }) //将 dbName 的值转换为 JSON 字符串
-// //发起异步 POST 请求
-//   const newDBResponse = await fetch("/databases", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body,
-//   })
-//   const newDBData = await newDBResponse.json() //解析响应体为 JSON 格式
+  const $pageForm = $("#pageForm")
 
-//   appendApiResponse(newDBData, dbResponseEl) //将响应体添加到页面上
-// }
+  /* ---------- 页面提交 ---------- */
+  $pageForm.on("submit", function (e) {
+    e.preventDefault() // 阻止表单默认提交
 
-//当没有提交 email 和 name 时，会弹出提示框，且输入框会变红;提交成功后，按钮会变成绿色动画对钩
+    // 输入元素
+    const $pageNameInput = $("#newPageName")
+    const $emailInput = $("#newEmail")
+    const $phoneInput = $("#newPhoneNumber")
+    const $paragraphInput = $("#newParagraph")
 
-$(document).ready(function() {
-  const pageForm = $("#pageForm");
-
-  pageForm.on("submit", function(e) {
-    e.preventDefault(); // 阻止表单默认提交
-
-    const pageNameInput = $("#newPageName");
-    const emailInput = $("#newEmail");
-    const phoneInput = $("#newPhoneNumber");  // 添加phone输入框引用
-    const paragraphInput = $("#newParagraph");  // 添加contents输入框引用
-
-    const pageName = pageNameInput.val().trim();
-    const email = emailInput.val().trim();
-    const phone = phoneInput.val().trim();          // 获取phone值
-    const paragraph = paragraphInput.val().trim();  // 获取contents值
+    const pageName = $pageNameInput.val().trim()
+    const email = $emailInput.val().trim()
+    const phone = $phoneInput.val().trim()
+    const paragraph = $paragraphInput.val().trim()
 
     // 重置错误样式
-    pageNameInput.css("border-bottom", "");
-    emailInput.css("border-bottom", "");
+    $pageNameInput.css("border-bottom", "")
+    $emailInput.css("border-bottom", "")
 
-    // 验证必填字段
+    // 必填校验
     if (!pageName || !email) {
-      if (!pageName) pageNameInput.css("border-bottom", "2px solid red");
-      if (!email) emailInput.css("border-bottom", "2px solid red");
-
-      setTimeout(() => {
-        alert("🤯 Name&Email must be required!");
-      }, 0);
-
-      return; // 不继续执行
+      if (!pageName) $pageNameInput.css("border-bottom", "2px solid red")
+      if (!email) $emailInput.css("border-bottom", "2px solid red")
+      setTimeout(() => alert("🤯 Name&Email must be required!"), 0)
+      return
     }
 
-    // 开始按钮动画
-    const button = pageForm.find("button");
-    const lBar = button.find(".load");
+    /* ---------- ★ 已提交过则提示 ---------- */
+    if (hasSubmitted) {
+      alert(lastSuccessMsg || "✅ 已提交成功！请点击刷新后再试。")
+      return
+    }
 
-    button.removeClass("complete");
-    lBar.removeClass("loading").width(0);
+    /* ---------- 提交按钮及进度条 ---------- */
+    const $submitBtn = $("#submitBtn")
+    const $lBar = $submitBtn.nextAll(".bar").find(".load")
 
-    setTimeout(() => lBar.addClass("loading"), 10);
+    // 复位动画
+    $submitBtn.removeClass("complete")
+    $lBar.removeClass("loading").width(0)
+    setTimeout(() => $lBar.addClass("loading"), 10)
 
-    // wml 给父页返回一个提交成功的提示
+    // 给父页发送成功提示（如需）
+    window.parent.postMessage("formSubmitted", "*")
 
-    window.parent.postMessage('formSubmitted', '*');
-
-    // 正确发送完整表单数据
-    const body = JSON.stringify({
-      pageName,
-      email,
-      phone,        // 新添加
-      paragraph     // 新添加
-    });
-
+    /* ---------- 发送请求 ---------- */
     fetch("/pages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body,
+      body: JSON.stringify({ pageName, email, phone, paragraph }),
     })
-    .then(res => res.json())
-    .then(data => {
-      setTimeout(() => {
-        button.addClass("complete");
-      }, 10);
-    })
-    // .catch(() => alert("提交失败，请重试"));
-  });
-});
+      .then((res) => res.json())
+      .then((data) => {
+        /* 动画完成 */
+        setTimeout(() => $submitBtn.addClass("complete"), 10)
 
+        /* ---------- ★ 锁定再次提交 ---------- */
+        hasSubmitted = true
+        lastSuccessMsg = data.message || "✅ Submit success!"
+      })
+      // .catch(() => alert("提交失败，请重试"))
+  })
 
-// blocksForm.onsubmit = async function (event) {
-//   event.preventDefault()
+  /* ---------- ★ 刷新按钮 ---------- */
+  $("#refreshBtn").on("click", function () {
+    $pageForm[0].reset()                                // 清空表单
+    const $submitBtn = $("#submitBtn")
+    const $lBar = $submitBtn.nextAll(".bar").find(".load")
+    $submitBtn.removeClass("complete")                   // 复位提交动画
+    $lBar.removeClass("loading").width(0)
 
-//   const pageID = event.target.pageID.value
-//   const content = event.target.content.value
-//   const body = JSON.stringify({ pageID, content })
-
-//   const newBlockResponse = await fetch("/blocks", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body,
-//   })
-
-//   const newBlockData = await newBlockResponse.json()
-//   appendBlocksResponse(newBlockData, blocksResponseEl)
-// }
-
-// commentForm.onsubmit = async function (event) {
-//   event.preventDefault()
-
-//   const pageID = event.target.pageIDComment.value
-//   const comment = event.target.comment.value
-//   const body = JSON.stringify({ pageID, comment })
-
-//   const newCommentResponse = await fetch("/comments", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body,
-//   })
-
-//   const newCommentData = await newCommentResponse.json()
-//   appendApiResponse(newCommentData, commentResponseEl)
-// }
+    hasSubmitted = false                                 // 解锁再次提交
+    lastSuccessMsg = ""
+  })
+})
