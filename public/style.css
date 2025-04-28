@@ -35,16 +35,15 @@ input {
   width: 100%;
 }
 
-/* 一行显示 2 个输入框 */
+/* Make each input field take up full width 小屏显示 1 行充满 */
 .form-row {
-  display: flex;
-  gap: 1rem; /* 控制两个输入框之间的距离 */
+  display: block;  /* Change from flex to block to stack elements */
+  gap: 0;          /* Remove any gap between elements */
 }
 
 .input-group {
-  flex: 1; /* 两个输入框平均分配宽度 */
-  display: flex;
-  flex-direction: column;
+  width: 100%;     /* Ensure each input group takes full width */
+  margin-bottom: 1em; /* Add space between inputs */
 }
 
 /* 在文本框里添加 icon */
@@ -67,7 +66,7 @@ input {
 .input-icon-container i {
   position: absolute;
   left: 10px;
-  top: 40%;
+  top: 50%;
   transform: translateY(-50%);
   color: #aaa;
 }
@@ -196,4 +195,21 @@ button:hover .load {
   background-color:#F3F3F3;
   color:#1c1412;
   padding: 0.5em; /* 鼠标悬停时添加内边距 */
+}
+
+/* Responsive layout for larger screens 大屏仍然显示一行 2 个 */
+@media (min-width: 768px) {
+  .form-row {
+    display: flex; /* Two inputs per row on larger screens */
+    gap: 1rem;     /* Space between inputs */
+  }
+
+  .input-group {
+    flex: 1; /* 两个输入框平均分配宽度 */
+    display: flex;
+    flex-direction: column;  }
+/* 让图标垂直居中 */
+    .input-icon-container i {
+  top: 40%;
+}
 }
