@@ -46,6 +46,11 @@ input {
   margin-bottom: 1em; /* Add space between inputs */
 }
 
+/* 当手机端小屏显示时，不让 header 成为占位符 */
+#hidden {
+  display: none;
+}
+
 /* 在文本框里添加 icon */
 .input-icon-container {
   position: relative;
@@ -212,4 +217,8 @@ button:hover .load {
     .input-icon-container i {
   top: 40%;
 }
+/*让 header 隐藏并占据位置，使得 WhatsApp 为 50%*/
+    #hidden{
+      display: block;
+    }
 }
