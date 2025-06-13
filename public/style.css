@@ -84,6 +84,16 @@ input {
   color: #aaa;
 }
 
+/* 调整textarea placeholder的垂直对齐，使其与图标高度一致 */
+.input-icon-container textarea::placeholder {
+  padding-top: 5px; /* 微调placeholder文本的垂直位置 */
+  line-height: 1.2;
+}
+
+.input-icon-container textarea {
+  padding-top: 2px; /* 同时调整textarea内容的顶部内边距 */
+}
+
 
 /* 表单提交后的绿色对钩动画效果 */
 
