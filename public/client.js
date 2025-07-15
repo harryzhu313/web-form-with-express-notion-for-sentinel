@@ -1,6 +1,59 @@
 // This file is run by the browser each time your view template is loaded
 
 /**
+ * GCLID Tracking Functions for Google Ads Conversion Tracking
+ */
+
+// 从URL参数中获取gclid
+function getUrlParameter(name) {
+  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+  var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+  var results = regex.exec(location.search);
+  return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+// 设置Cookie
+function setCookie(name, value, days) {
+  var expires = "";
+  if (days) {
+    var date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+// 从Cookie中获取值
+function getCookieValue(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
+
+// 初始化GCLID追踪
+function initGclidTracking() {
+  // 1. 检查URL中是否有gclid参数
+  const gclidFromUrl = getUrlParameter('gclid');
+  
+  if (gclidFromUrl) {
+    // 2. 如果有，保存到Cookie中（保存90天）
+    setCookie('gclid', gclidFromUrl, 90);
+    console.log('GCLID captured from URL:', gclidFromUrl);
+  }
+  
+  // 3. 从Cookie中读取gclid并填入隐藏字段
+  const savedGclid = getCookieValue('gclid');
+  if (savedGclid) {
+    const gclidInput = document.getElementById('gclid_field');
+    if (gclidInput) {
+      gclidInput.value = savedGclid;
+      console.log('GCLID loaded from cookie:', savedGclid);
+    }
+  }
+}
+
+/**
  * Define variables that reference elements included in /views/index.html:
  */
 
@@ -52,6 +105,9 @@ const appendBlocksResponse = function (apiResponse, el) {
  */
 
 $(document).ready(function () {
+  /* ---------- ★ 初始化GCLID追踪 ---------- */
+  initGclidTracking();
+
   /* ---------- ★ 提交锁定状态 ---------- */
   let hasSubmitted = false          // 是否已提交过
   let lastSuccessMsg = ""           // 记录服务器成功返回值
@@ -67,11 +123,13 @@ $(document).ready(function () {
     const $emailInput = $("#newEmail")
     const $phoneInput = $("#newPhoneNumber")
     const $paragraphInput = $("#newParagraph")
+    const $gclidInput = $("#gclid_field")
 
     const pageName = $pageNameInput.val().trim()
     const email = $emailInput.val().trim()
     const phone = $phoneInput.val().trim()
     const paragraph = $paragraphInput.val().trim()
+    const gclid = $gclidInput.val().trim() || ""
 
     // 重置错误样式
     $pageNameInput.css("border-bottom", "")
@@ -107,7 +165,7 @@ $(document).ready(function () {
     fetch("/pages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pageName, email, phone, paragraph }),
+      body: JSON.stringify({ pageName, email, phone, paragraph, gclid }),
     })
       .then((res) => res.json())
       .then((data) => {
