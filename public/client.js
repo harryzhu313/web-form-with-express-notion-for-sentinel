@@ -136,6 +136,9 @@ $(document).ready(function () {
     const phone = $phoneInput.val().trim()
     const paragraph = $paragraphInput.val().trim()
     const gclid = $gclidInput.val().trim() || ""
+    
+    // 调试：打印所有要提交的数据
+    console.log('准备提交的数据:', { pageName, email, phone, paragraph, gclid });
 
     // 重置错误样式
     $pageNameInput.css("border-bottom", "")

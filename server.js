@@ -48,6 +48,10 @@ app.get("/", function (request, response) {
 // Create new page. The database ID is provided in the web form.添加了 database 的环境变量，不需要新创建一个 database 再添加 page 了。
 app.post("/pages", async function (request, response) {
   const { pageName, email, phone, header, paragraph, gclid } = request.body;
+  
+  // 调试：打印接收到的数据
+  console.log('服务器接收到的数据:', { pageName, email, phone, header, paragraph, gclid });
+  
   // 输入校验，只要求必须填写 name 和 email
   if (!pageName || !email) {
     return response.json({ message: "❌ Name&Email must be required!" });
@@ -80,6 +84,7 @@ app.post("/pages", async function (request, response) {
 //if(gclid) 判断gclid是否存在，如果存在，则将gclid写入Notion数据库的GCLID列中
 //rich_text, text是 notion 的富文本格式，content是富文本的内容
   if (gclid) {
+    console.log('✅ 正在添加GCLID到Notion:', gclid);
     properties.GCLID = {
       rich_text: [
         {
@@ -89,6 +94,8 @@ app.post("/pages", async function (request, response) {
         },
       ],
     };
+  } else {
+    console.log('⚠️ 没有接收到GCLID数据');
   }
 
   // 构造 children 数组，header 和 paragraph 均为可选
