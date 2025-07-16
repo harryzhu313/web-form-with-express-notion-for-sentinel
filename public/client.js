@@ -31,24 +31,30 @@ function getCookieValue(name) {
   return null;
 }
 
-// 初始化GCLID追踪
+// 简化版GCLID追踪（直接从URL获取）
 function initGclidTracking() {
-  // 1. 检查URL中是否有gclid参数
-  const gclidFromUrl = getUrlParameter('gclid');
+  const urlParams = new URLSearchParams(window.location.search);
+  const gclid = urlParams.get("gclid");
   
-  if (gclidFromUrl) {
-    // 2. 如果有，保存到Cookie中（保存90天）
-    setCookie('gclid', gclidFromUrl, 90);
-    console.log('GCLID captured from URL:', gclidFromUrl);
-  }
-  
-  // 3. 从Cookie中读取gclid并填入隐藏字段
-  const savedGclid = getCookieValue('gclid');
-  if (savedGclid) {
-    const gclidInput = document.getElementById('gclid_field');
-    if (gclidInput) {
-      gclidInput.value = savedGclid;
-      console.log('GCLID loaded from cookie:', savedGclid);
+  if (gclid) {
+    // 保存到Cookie中（保存90天）
+    setCookie('gclid', gclid, 90);
+    console.log('GCLID captured from URL:', gclid);
+    
+    // 填入隐藏字段
+    const gclidField = document.getElementById("gclid_field");
+    if (gclidField) {
+      gclidField.value = gclid;
+    }
+  } else {
+    // 如果URL中没有gclid，尝试从Cookie中获取
+    const savedGclid = getCookieValue('gclid');
+    if (savedGclid) {
+      const gclidField = document.getElementById("gclid_field");
+      if (gclidField) {
+        gclidField.value = savedGclid;
+        console.log('GCLID loaded from cookie:', savedGclid);
+      }
     }
   }
 }
