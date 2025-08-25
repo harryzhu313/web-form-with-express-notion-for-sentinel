@@ -52,9 +52,9 @@ app.post("/pages", async function (request, response) {
   // 调试：打印接收到的数据
   console.log('服务器接收到的数据:', { pageName, email, phone, header, paragraph, gclid });
   
-  // 输入校验，只要求必须填写 name 和 email
-  if (!pageName || !email) {
-    return response.json({ message: "❌ Name&Email must be required!" });
+  // 输入校验：必须填写 name、email、paragraph
+  if (!pageName || !email || !paragraph) {
+    return response.json({ message: "❌ Name, Email & Contents are required!" });
   }
   const dbID = process.env.NOTION_DATABASE_ID;
 

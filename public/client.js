@@ -143,12 +143,14 @@ $(document).ready(function () {
     // 重置错误样式
     $pageNameInput.css("border-bottom", "")
     $emailInput.css("border-bottom", "")
+    $paragraphInput.css("border-bottom", "")
 
-    // 必填校验
-    if (!pageName || !email) {
+    // 必填校验（Name、Email、Contents）
+    if (!pageName || !email || !paragraph) {
       if (!pageName) $pageNameInput.css("border-bottom", "2px solid red")
       if (!email) $emailInput.css("border-bottom", "2px solid red")
-      setTimeout(() => alert("🤯 Name&Email must be required!"), 0)
+      if (!paragraph) $paragraphInput.css("border-bottom", "2px solid red")
+      setTimeout(() => alert("🤯 Name, Email & Contents are required!"), 0)
       return
     }
 
